@@ -1,0 +1,157 @@
+a:hover,a:focus{
+    text-decoration: none;
+    color: #fff;
+}
+
+.top h1{
+    margin-top: 0;
+    margin-left: 30px;
+}
+
+.top p{
+    margin-bottom: 0;
+    margin-left: 30px;
+}
+
+.top{
+    position: relative;
+}
+
+.divider span{
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.big-button{
+    position: absolute;
+    bottom: 55px;
+    right: 110px;
+    font-size: 18px;
+    border: 1px solid #d9534f;
+    padding: 8px 22px;
+    background: #d9534f;
+    color: #fff;
+    border-radius: 6px;
+    transition: .3s;
+}
+
+.big-button:hover{
+    box-shadow: 0 0 8px #d9534f;
+    opacity: 0.8;
+}
+
+.article{
+    margin: 20px auto;
+    width: 60%;
+}
+
+.article h1{
+    font-size: 42px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.article-title h1 small{
+    margin-left: 20px;
+    margin-top: 24px;
+    font-size:18px;
+}
+
+.list-group-opaerate{
+    float:right;
+}
+
+
+.list-group-opaerate .dropdown-menu>li:nth-of-type(1)>a>i{
+    float: right;
+    font-size: 20px;
+    margin-right: 2px;
+    color: #666666;
+}
+
+.list-group-opaerate .dropdown-menu>li:nth-of-type(2)>a>i{
+    float: right;
+    font-size: 20px;
+    margin-right: 4px;
+    color: #666;
+}
+
+
+.btn-danger{
+    transition: .3s;
+}
+
+.btn-danger:hover{
+    box-shadow: 0 0 10px #d9534f;
+    background: #d9534f;
+    border-color: #d9534f;
+}
+
+.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus{
+    background-color: #D9534F;
+}
+
+
+
+.small-button{
+    display: block;
+    padding: 4px 15px;
+    border-radius: 4px;
+    background: #fff;
+    color: #d9534f;
+    border: 1px solid #d9534f;
+    font-size: 15px;
+    transition: .3s;
+}
+
+.small-button:hover{
+    background: #d9534f;
+}
+
+.article-label{
+    margin-top: 10px;
+    display: flex;
+}
+
+.article-label p{
+    font-size: 10px;
+    color: #999999;
+    margin-right: 15px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    background: #e0e0e0;
+}
+
+.article-end-symbol{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999999;
+}
+
+.article-text{
+    color: #444444;
+    margin-top: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.back-to-top{
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    z-index: 999;
+}
+
+.scroll-link i{
+    opacity: 0.5;
+    font-size: 42px;
+    color: #d5d5d5;
+    cursor: pointer;
+}
+
+.scroll-link i:hover{
+    opacity: 1;
+    color: #d9534f;
+}

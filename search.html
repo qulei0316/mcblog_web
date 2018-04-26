@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>search articles</title>
+		<!--CSS-->
+		<link rel="stylesheet" href="assets/amaze/css/amazeui.min.css">
+		<link rel="stylesheet" href="assets/amaze/css/app.css">
+		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/css/animate.css" />
+		<link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/style-search.css" />
+		<link rel="stylesheet" href="assets/toast/toastr.css">
+	</head>
+
+	<body>
+		<div class="top jumbotron">
+			<h1>Search here!</h1>
+			<p>This page is for you to search and manage articles you have wrttien.</p>
+			<div class="top-search">
+				<input type="text" class="top-search-input" placeholder="Key words..." />
+				<a id="search" href="javascript:void(0)"><i class="fa fa-search top-search-icon"></i></a>
+			</div>
+		</div>
+
+		<!--list-->
+		<div class="content">
+			<div class="content-nav">
+				<ul class="nav nav-tabs">
+					<li name="1" role="presentation" class="dropdown active initial">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">
+							Collection <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu content-nav-collection">
+							<li class="active"><a href="javascript:void(0)">All</a></li>
+						</ul>
+					</li>
+					<li name="2" role="presentation">
+						<a href="javascript:void(0)">Draft box</a>
+					</li>
+					<!--<li name="3" role="presentation">-->
+						<!--<a href="javascript:void(0)">Draft box</a>-->
+					<!--</li>-->
+				</ul>
+			</div>
+			<div class="content-list">
+                <div class="no-data" style="display: none">NO DATA</div>
+				<div class="list-group">
+					<div class="list-item">
+						<span name="article-id" class="list-group-item-heading">文章标题</span>
+						<span>Collection: java</span>
+						<div class="list-group-item-text">
+							<p>标签一</p>
+							<p>标签二</p>
+							<p>标签三</p>
+						</div>
+						<div class="list-group-opaerate">
+							<div class="btn-group">
+								<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Action <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="read.html" target="_blank">Read<i class="fa fa-external-link"></i></a></li>
+									<li><a href="#">Edit<i class="fa fa-pencil"></i></a></li>
+									<li data-id="article-id" ><a href="javascript:void(0)">Delete<i class="fa fa-trash-o"></i></a></li>
+									<li class="dropdown-submenu">
+										<a href="javascript:void(0)">Move<i class="fa fa-folder-open-o"></i></a>
+										<ul class="dropdown-menu collection-move">
+											<li><a href="javascript:void(0)">ss</a></li>
+											<li><a href="javascript:void(0)">aa</a></li>
+											<li><a href="javascript:void(0)">dd</a></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="content-list-paginator">
+					<ul class="pagination" id="pagination1"></ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="am-modal am-modal-confirm" tabindex="-1" id="delete-article">
+			<div class="am-modal-dialog">
+				<div class="am-modal-hd">
+					Are you sure you want to delete this article？
+				</div>
+				<div class="am-modal-bd">
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" style="width: 50%" data-am-modal-cancel>NO</span>
+					<span class="am-modal-btn" style="width: 50%" data-am-modal-confirm>YES</span>
+				</div>
+			</div>
+		</div>
+
+		<div id="collection_str" name="" style="display: none"></div>
+		<!--scripts-->
+		<script src="assets/js/jquery-1.11.1.min.js"></script>
+		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/js/jqPaginator.js"></script>
+		<script src="assets/toast/toastr.js"></script>
+		<script src="assets/toast/toastr.setting.js"></script>
+		<script src="assets/amaze/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+			    init_page();
+
+				/*删除弹框*/
+                $('body').on('click','.list-group-opaerate .dropdown-menu>li:nth-of-type(3)',function () {
+					$('#delete-article').modal({
+						relatedTarget:this,
+						onConfirm: function (options) {
+							var link = $(this.relatedTarget);
+							var msg = link.data('id');
+                            var user_id = window.localStorage.getItem("mb_userid");
+                            var token = window.localStorage.getItem("mb_token");
+                            $.ajax({
+                                type:'post',
+                                url:'http://10.58.1.166:9000/article/changetype?token='+token,
+                                dataType:'json',
+                                contentType:'application/json;charset=UTF-8',
+                                data:JSON.stringify({user_id:user_id,id:msg,type:3}),
+                                success:function (data) {
+                                    if (data.code != 0){
+                                        toastr.error(data.msg);
+                                        return;
+                                    }else {
+                                        //移除dom
+                                        $('.list-group-item-heading[name="'+ msg +'"]').parent().remove();
+                                        toastr.success("Already put in trash");
+                                    }
+                                }
+                            })
+                        },
+						onCancel:function () {
+							//
+                        }
+                    })
+                })
+
+                //编辑
+                $('body').on('click','.list-group-opaerate .dropdown-menu>li:nth-of-type(2)',function () {
+                    window.location.href="write.html?id="+$(this).attr('data-id');
+                })
+
+                //读文章
+                $('body').on('click','.list-group-opaerate .dropdown-menu>li:nth-of-type(1)',function () {
+                    window.location.href="read.html?id="+$(this).attr('data-id');
+                })
+
+				/*点击文章标题*/
+                $('body').on('click',"[class='list-group-item-heading']",function () {
+                    window.location.href="read.html?id="+$(this).attr('name');
+                })
+
+                /*
+                nav choose
+                 */
+                $('.nav-tabs>li').on('click',function () {
+                    if(!($(this).hasClass('active'))) {
+                        $('.nav-tabs>li.active').removeClass('active');
+                        $(this).addClass('active');
+                        var type = parseInt($(this).attr('name'));
+                        if ($(this).hasClass('initial')) {
+							var collection_id =  $('.content-nav-collection>li.active').attr('name');
+                            type_list_init(type, collection_id);
+                        } else {
+                            type_list_init(type, null);
+                        }
+                    }
+                })
+
+                $('body').on('click',".content-nav-collection>li",function () {
+					if(!($(this).hasClass('active'))){
+					    $('.content-nav-collection>li.active').removeClass('active');
+					    $(this).addClass('active');
+					}
+                    var collection_id = $(this).attr('name');
+                    type_list_init(1,collection_id);
+                })
+
+
+                //移动文集
+                $('body').on('click','.collection-move li',function () {
+                    var col_name = $(this).text();
+                    var col_id = $(this).attr('name');
+                    var art_id = $(this).parent().parent().prev().attr('data-id');
+                    var user_id = window.localStorage.getItem("mb_userid");
+                    var token = window.localStorage.getItem("mb_token");
+                    $.ajax({
+                        type:'post',
+                        url:'http://10.58.1.166:9000/article/move?token='+token,
+                        dataType:'json',
+                        contentType:'application/json;charset=UTF-8',
+                        data:JSON.stringify({collection_id:col_id,id:art_id,user_id:user_id}),
+                        success:function (data) {
+                            if (data.code != 0){
+                                toastr.error(data.msg);
+                                return;
+                            }else {
+                                //更换Collection
+                                toastr.success("success!");
+                                $('.list-group-item-heading[name="'+ art_id +'"]').next().text("Collection: "+col_name);
+                            }
+                        }
+                    })
+                })
+
+				//搜索功能
+                $('body').on('keypress',"[class='top-search-input']",function(e){
+                    if (e.keyCode == 13) {
+						keyword_list_init()
+					}
+                })
+
+				$('#search').on('click',function () {
+                        keyword_list_init()
+                })
+			})
+
+
+            //初始化页面
+            function init_page() {
+                var user_id = window.localStorage.getItem("mb_userid");
+                var token = window.localStorage.getItem("mb_token");
+                init_collection_list();
+                type_list_init(1,null);
+            }
+
+            //初始化文集列表
+            function init_collection_list() {
+                var user_id = window.localStorage.getItem("mb_userid");
+                var token = window.localStorage.getItem("mb_token");
+                $.ajax({
+                    type:'get',
+                    url:'http://10.58.1.166:9000/collection/getlist?user_id='+user_id+'&token='+token,
+                    dataType:'json',
+                    success:function (data) {
+                        if (data.code != 0){
+                            toastr.error(data.msg);
+                            return;
+                        }else {
+                            //渲染列表
+                            var list = data.data;
+                            var collectionStr = "";
+                            for (var j in list){
+                                collectionStr += "<li name='"+ list[j].id+"'><a href='javascript:void(0)'>"+ list[j].name+"</a></li>\n"
+                            }
+							$('#collection_str').attr('name',collectionStr);
+                            $('.content-nav-collection').append(collectionStr);
+                        }
+                    }
+                })
+            }
+
+            //根据collection——id或者type获取列表
+            function type_list_init(artType,collection_id) {
+                var user_id = window.localStorage.getItem("mb_userid");
+                var token = window.localStorage.getItem("mb_token");
+                $.ajax({
+                    type:'post',
+                    url:'http://10.58.1.166:9000/article/findbytype?token='+token,
+                    dataType:'json',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({pageIndex:1,user_id:user_id,collection_id:collection_id,type:artType}),
+                    success:function (data) {
+                        if (data.code != 0){
+                            toastr.error(data.msg);
+                            return;
+                        }else {
+                            $('.list-group').empty();
+                            var list = data.data.articleList;
+                            var totalPage = data.data.totalPage;
+                            if (list.length == 0){
+                                $('.no-data').css('display','block');
+                                init_pagination(totalPage,artType,collection_id);
+                            }else {
+                                $('.no-data').css('display','none');
+                                init_pagination(totalPage,artType,collection_id);
+                            }
+                        }
+                    }
+                })
+            }
+
+            //根据关键字搜索
+            function keyword_list_init() {
+			    var artType = parseInt($('.nav-tabs>li.active').attr('name'));
+			    var collection_id = $('.content-nav-collection>li.active').attr('name');
+			    if (artType!=1){
+			        collection_id = null;
+				}
+                var keywords = $('.top-search-input').val();
+                if ($.trim(keywords) == ""){
+                    return;
+                }
+                var user_id = window.localStorage.getItem("mb_userid");
+                var token = window.localStorage.getItem("mb_token");
+                $.ajax({
+                    type:'post',
+                    url:'http://10.58.1.166:9000/article/findbykeyword?token='+token,
+                    dataType:'json',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({pageIndex:1,user_id:user_id,collection_id:collection_id,type:artType,keywords:keywords}),
+                    success:function (data) {
+                        if (data.code != 0){
+                            toastr.error(data.msg);
+                            return;
+                        }else {
+                            $('.list-group').empty();
+                            var list = data.data.articleList;
+                            var totalPage = data.data.totalPage;
+                            if (list.length == 0){
+                                $('.no-data').css('display','block');
+                                keyword_pagination(totalPage,artType,collection_id);
+                            }else {
+                                $('.no-data').css('display','none');
+                                keyword_pagination(totalPage,artType,collection_id);
+                            }
+                        }
+                    }
+                })
+            }
+
+            function type_list(pageIndex,collection_id,artType) {
+                var user_id = window.localStorage.getItem("mb_userid");
+                var token = window.localStorage.getItem("mb_token");
+                var keywords = $('.top-search-input').val();
+                if (artType!=1){
+                    collection_id=null;
+				}
+                $.ajax({
+                    type:'post',
+                    url:'http://10.58.1.166:9000/article/findbytype?token='+token,
+                    dataType:'json',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({collection_id:collection_id,pageIndex:pageIndex,user_id:user_id,type:artType}),
+                    success:function (data) {
+                        if (data.code != 0){
+                            toastr.error(data.msg);
+                            return;
+                        }else {
+                            $('.list-group').empty();
+                            var list = data.data.articleList;
+                            var totalPage = data.data.totalPage;
+                            if (list.length == 0){
+                                $('.no-data').css('display','block');
+                            }else {
+                                for (var i in list){
+                                    var labelList = list[i].labelList;
+                                    var labelStr = "";
+                                    if (labelList.length == 0){
+                                        labelStr += "<span>Label: null</span>"
+                                    }
+                                    for (var j in labelList){
+                                        labelStr += "<p>"+labelList[j].content+"</p>\n";
+                                    }
+                                    var collectionStr = $('#collection_str').attr('name');
+                                    $('.list-group').append(
+                                        "<div class='list-item'>\n" +
+                                        "<span name='" + list[i].article.id + "' class='list-group-item-heading'>"+ list[i].article.title+"</span>\n" +
+                                        "<span>Collection: "+ list[i].article.collection_name +"</span>\n" +
+										"<div class='list-group-item-text'>\n" +
+                                        labelStr+
+                                        "</div>\n" +
+                                        "<div class='list-group-opaerate'>\n" +
+                                        "<div class='btn-group'>\n" +
+                                        "<button type='button' class='btn btn-danger dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>\n" +
+                                        "Action <span class='caret'></span>\n" +
+                                        "</button>\n" +
+                                        "<ul class='dropdown-menu'>\n" +
+                                        "<li data-id='" + list[i].article.id +"'><a href='javascript:void(0)' target='_blank'>Read<i class='fa fa-external-link'></i></a></li>\n" +
+                                        "<li data-id='" + list[i].article.id +"'><a href='javascript:void(0)'>Edit<i class='fa fa-pencil'></i></a></li>\n" +
+                                        "<li data-id='" + list[i].article.id +"' ><a href='javascript:void(0)'>Delete<i class='fa fa-trash-o'></i></a></li>\n" +
+                                        "<li class='dropdown-submenu'>\n" +
+                                        "<a href='javascript:void(0)'>Move<i class='fa fa-folder-open-o'></i></a>\n" +
+                                        "<ul class='dropdown-menu collection-move'>\n" +
+                                        collectionStr+
+                                        "</ul>\n" +
+                                        "</li>\n" +
+                                        "</ul>\n" +
+                                        "</div>\n" +
+                                        "</div>\n" +
+                                        "</div>")
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+
+            function keyword_list(pageIndex,collection_id,artType) {
+                var user_id = window.localStorage.getItem("mb_userid");
+                var token = window.localStorage.getItem("mb_token");
+                var keywords = $('.top-search-input').val();
+                if ($.trim(keywords) == ""){
+                    return;
+				}
+                $.ajax({
+                    type:'post',
+                    url:'http://10.58.1.166:9000/article/findbykeyword?token='+token,
+                    dataType:'json',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({collection_id:collection_id,pageIndex:pageIndex,user_id:user_id,type:artType,keywords:keywords}),
+                    success:function (data) {
+                        if (data.code != 0){
+                            toastr.error(data.msg);
+                            return;
+                        }else {
+                            $('.list-group').empty();
+                            var list = data.data.articleList;
+                            if (list.length == 0){
+                                $('.no-data').css('display','block');
+                            }else {
+                                for (var i in list){
+                                    var labelList = list[i].labelList;
+                                    var labelStr = "";
+                                    if (labelList.length == 0){
+                                        labelStr += "<span>Label: null</span>"
+                                    }
+                                    for (var j in labelList){
+                                        labelStr += "<p>"+labelList[j].content+"</p>\n";
+                                    }
+                                    var collectionStr = $('#collection_str').attr('name');
+                                    $('.list-group').append(
+                                        "<div class='list-item'>\n" +
+                                        "<span name='" + list[i].article.id + "' class='list-group-item-heading'>"+ list[i].article.title+"</span>\n" +
+                                        "<span>Collection: "+ list[i].article.collection_name +"</span>\n" +
+                                        "<div class='list-group-item-text'>\n" +
+                                        labelStr+
+                                        "</div>\n" +
+                                        "<div class='list-group-opaerate'>\n" +
+                                        "<div class='btn-group'>\n" +
+                                        "<button type='button' class='btn btn-danger dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>\n" +
+                                        "Action <span class='caret'></span>\n" +
+                                        "</button>\n" +
+                                        "<ul class='dropdown-menu'>\n" +
+                                        "<li><a href='javascript:void(0)' target='_blank'>Read<i class='fa fa-external-link'></i></a></li>\n" +
+                                        "<li><a href='javascript:void(0)'>Edit<i class='fa fa-pencil'></i></a></li>\n" +
+                                        "<li data-id='" + list[i].article.id +"' ><a href='javascript:void(0)'>Delete<i class='fa fa-trash-o'></i></a></li>\n" +
+                                        "<li class='dropdown-submenu'>\n" +
+                                        "<a href='javascript:void(0)'>Move<i class='fa fa-folder-open-o'></i></a>\n" +
+                                        "<ul class='dropdown-menu collection-move'>\n" +
+                                        collectionStr+
+                                        "</ul>\n" +
+                                        "</li>\n" +
+                                        "</ul>\n" +
+                                        "</div>\n" +
+                                        "</div>\n" +
+                                        "</div>")
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+
+
+
+            //初始化页码
+            function init_pagination(totalPage,artType,collection_id) {
+			    $.jqPaginator('#pagination1', {
+                    totalPages: totalPage,
+                    visiblePages: 5,
+                    currentPage: 1,
+                    onPageChange: function (num) {
+                        type_list(num,collection_id,artType);
+                    }
+                });
+            }
+
+            //keyword页码
+			function keyword_pagination(totalPage,artType,collection_id) {
+                $.jqPaginator('#pagination1', {
+                    totalPages: totalPage,
+                    visiblePages: 5,
+                    currentPage: 1,
+                    onPageChange: function (num) {
+                        keyword_list(num,collection_id,artType);
+                    }
+                });
+            }
+		</script>
+	</body>
+
+</html>

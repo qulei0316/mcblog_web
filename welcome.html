@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>welcome</title>
+		
+		<!--CSS-->
+		<link rel="stylesheet" href="assets/amaze/css/amazeui.min.css">
+		<link rel="stylesheet" href="assets/amaze/css/app.css">
+		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="assets/css/animate.css" />
+		<link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/style.css"/>
+		<link rel="stylesheet" href="assets/toast/toastr.css">
+	</head>
+	<body>
+		<!--<div class="loader">-->
+			<!--<div class="loader-img"></div>-->
+		<!--</div>-->
+
+		<!--welcome-->
+		<div class="welcome">
+			<div class="welcome-text animated fadeIn">
+				<div class="divider-1"><span></span></div>
+				<h1>MICROBLOG</h1>
+				<div class="divider-1"><span></span></div>
+				<p>
+					Welcome!This is a lightweight blog site.
+				</p>
+				<p>Let's start writing.</p>
+				<div class="welcome-text-button">
+					<a class="big-button" href="write.html" target="_blank">write an article</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="tool animated fadeIn">
+			<span>Log in</span>
+			<span>Sign up</span>
+		</div>
+
+		<div class="icon animated fadeIn">
+			<p><i class="fa fa-chevron-down"></i></p>
+		</div>
+
+		<!--logout modal-->
+		<div class="am-modal am-modal-prompt" tabindex="-1" id="logout-modal">
+			<div class="am-modal-dialog">
+				<div class="am-modal-hd">Current user</div>
+				<div class="am-modal-bd">
+					<i class="fa fa-user" style="font-size: 25px"></i><span class="user_nickname" style="font-size:22px;margin-left:5px;color: #444444;font-family: Cambria"></span>
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" data-am-modal-cancel>Confirm</span>
+					<span class="am-modal-btn" data-am-modal-confirm>Log out</span>
+				</div>
+			</div>
+		</div>
+
+		<!--login modal-->
+		<div class="am-modal am-modal-prompt" tabindex="-1" id="login-modal">
+			<div class="am-modal-dialog">
+				<div class="am-modal-hd">Log in</div>
+				<div class="am-modal-bd">
+					<input type="text" id="login-name" class="am-modal-prompt-input" style="margin-bottom: 20px" placeholder="Email or Phone NO">
+					<input type="password" id="login-password" class="am-modal-prompt-input" style="margin-bottom: 10px" placeholder="Password">
+						<div class="login-problem">
+							<span data-am-modal-close>forget password?</span>
+						</div>
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" data-am-modal-confirm>CONFIRM</span>
+				</div>
+			</div>
+		</div>
+
+		<!--forget password-->
+		<div class="am-modal am-modal-prompt" tabindex="-1" id="pwd-modal">
+			<div class="am-modal-dialog">
+				<div class="am-modal-hd">
+					<p>Input your phone number or email,</p>
+					<p>we will send you the password.</p></div>
+				<div class="am-modal-bd">
+					<input type="text" id="pwd-name" class="am-modal-prompt-input" style="margin-bottom: 20px" placeholder="">
+					<div style="display: flex">
+						<input type="text" class="am-modal-prompt-input" style="margin-bottom: 20px;width: 60%;margin-left:10%" >
+						<button type="button" id="pwd-send-code-button" style="position:relative;margin-right: 10%;width:15%;height: 32px;margin-top: 5px;margin-bottom: 5px;padding-bottom: 5px" class="am-btn am-btn-primary am-radius" disabled><span style="position: absolute;top: 6px;right: 19px">Send</span></button>
+					</div>
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" data-am-modal-confirm>Confirm</span>
+				</div>
+			</div>
+		</div>
+
+		<!--signup modal-->
+		<div class="am-modal am-modal-prompt" tabindex="-1" id="signup-modal">
+			<div class="am-modal-dialog">
+				<div class="am-modal-hd">Sign up</div>
+				<div class="am-modal-bd">
+					<input type="text" class="am-modal-prompt-input" style="margin-bottom: 20px" id="signup-nickname" placeholder="Nickname">
+					<input type="text" class="am-modal-prompt-input" style="margin-bottom: 20px" id="signup-username" placeholder="Email or Phone NO">
+					<div style="display: flex">
+						<input type="text" class="am-modal-prompt-input" style="margin-bottom: 20px;width: 60%;margin-left:10%" id="signup-code" placeholder="Identifying code">
+						<button type="button" id="send-code-button" style="position:relative;margin-right: 10%;width:15%;height: 32px;margin-top: 5px;margin-bottom: 5px;padding-bottom: 5px" class="am-btn am-btn-primary am-radius" disabled><span style="position: absolute;top: 6px;right: 19px">Send</span></button>
+					</div>
+					<input type="password" class="am-modal-prompt-input" style="margin-bottom: 10px" id="signup-password" placeholder="Password">
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" data-am-modal-confirm>CONFIRM</span>
+				</div>
+			</div>
+		</div>
+
+		<!--search-->
+		<div class="search-article section-container animated fadeIn">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 section-description">
+						<h2>Find an article</h2>
+						<div class="divider-2"><span></span></div>
+						<p>
+							If you want to review or manage your acticles,click here
+						</p>
+						
+					</div>
+				</div>
+				<div class="row">
+					<div class="search-article-box">
+						<a href="search.html" class="search-article-box-icon" target="_blank"><i class="fa fa-search"></i></a>
+						<h3>Search</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--script-->
+		<script src="assets/js/jquery-1.11.1.min.js"></script>
+		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/js/jquery.backstretch.min.js"></script>
+		<script src="assets/js/wow.min.js"></script>
+		<script src="assets/toast/toastr.js"></script>
+		<script src="assets/toast/toastr.setting.js"></script>
+		<script src="assets/amaze/js/amazeui.min.js"></script>
+		<script src="assets/js/script.js"></script>
+		<script>
+			var flag_signup_send_button = true;
+			$(document).ready(function () {
+                $('.icon p').on('click',function () {
+                    var h = $(document).height()-$(window).height();
+                    $('html,body').animate({scrollTop:h},1000);
+                })
+
+                $('.tool span:nth-of-type(1)').on('click',function () {
+                    var user_id = window.localStorage.getItem('mb_userid');
+                    var nickname = window.localStorage.getItem('mb_nickname');
+                    if (user_id == "" || user_id == null || user_id== undefined) {
+                        $('#login-modal').modal({
+                            relatedTarget: this,
+                            onConfirm: function (e) {
+                                login();
+                            }
+                        });
+                    }else {
+                        $('.user_nickname').html(nickname);
+                        $('#logout-modal').modal({
+                            relatedTarget: this,
+                            onConfirm: function (e) {
+								logout();
+                            }
+                        });
+					}
+                });
+
+                //找回密码
+				$('.login-problem').on('click',function () {
+                    $('#pwd-modal').modal({
+                        relatedTarget: this,
+                        onConfirm: function (e) {
+
+                        }
+                    });
+                })
+
+                $('.tool span:nth-of-type(2)').on('click',function () {
+                    $('#signup-modal').modal({
+                        relatedTarget: this,
+                        onConfirm: function(e) {
+                            var nickname = $('#signup-nickname').val();
+                            var username = $('#signup-username').val();
+                            var password = $('#signup-password').val();
+                            var code = $('#signup-code').val();
+                            $.ajax({
+                                type:'post',
+                                url:'http://localhost:9000/user/signup',
+								contentType:'application/json;charset=UTF-8',
+                                data:{username:username,password:password,nickname:nickname,code:code},
+                                dataType:'json',
+                                success:function (data) {
+                                    if (data.code!=0){
+                                        toastr.error(data.msg);
+                                    }else {
+                                        toastr.success("success!");
+                                    }
+                                },
+                                error:function (data) {
+                                }
+                            })
+                        }
+                    });
+                });
+
+                $('.search-article-box-icon').on('click',function (e) {
+                    if(window.localStorage.getItem('mb_userid')==null || window.localStorage.getItem('mb_userid')== undefined||window.localStorage.getItem('mb_userid')=="") {
+                        e.preventDefault();
+                        $('#login-modal').modal({
+                            relatedTarget: this,
+                            onConfirm: function (e) {
+                                search_login();
+                            }
+                        });
+                    }
+                })
+
+                $('.welcome-text-button').on('click',function (e) {
+                    if(window.localStorage.getItem('mb_userid')==null || window.localStorage.getItem('mb_userid')==undefined || window.localStorage.getItem('mb_userid')=="") {
+                        e.preventDefault();
+                        $('#login-modal').modal({
+                            relatedTarget: this,
+                            onConfirm: function (e) {
+                               write_login();
+                            }
+                        });
+                    }
+                })
+
+				//注册时发送验证码
+				$('#send-code-button').on('click',function () {
+				    var user = $('#signup-username').val()
+                    $.ajax({
+                        type:'get',
+                        url:'http://localhost:9000/user/sendcode?user='+user,
+                        contentType:'application/json;charset=UTF-8',
+                        dataType:'json',
+                        success:function (data) {
+                            if (data.code!=0){
+                                toastr.error(data.msg);
+                            }else {
+                                toastr.success("send success!");
+                                $('#send-code-button').attr('disabled',true);
+                                flag_signup_send_button = false;
+                                setTimeout(function () {
+									flag_signup_send_button = true;
+                                    if (regPhone.test(value) || regEmail.test(value)) {
+                                        $('#send-code-button').attr('disabled', false);
+                                    }
+                                },60000)
+                            }
+                        },
+                        error:function (data) {
+                            toastr.error(data.msg)
+                        }
+                    })
+                })
+
+
+				//注册时输入手机号和邮箱时回复发送验证码按钮
+				$('#signup-username').bind('input propertychange',function () {
+					if (flag_signup_send_button == true) {
+                        var value = $(this).val();
+                        var regPhone = /^1\d{10}$/
+                        var regEmail = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/
+                        if (regPhone.test(value) || regEmail.test(value)) {
+                            $('#send-code-button').attr('disabled', false);
+                        } else {
+                            $('#send-code-button').attr('disabled', true);
+                        }
+                    }
+                })
+            })
+
+
+			function login() {
+                var username = $('#login-name').val();
+                var password = $('#login-name').val();
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:9000/user/login',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({username:username,password:password}),
+                    dataType:'json',
+                    success:function (data) {
+                        if (data.code!=0){
+                            toastr.error(data.msg);
+                        }else {
+                            toastr.success("login success!");
+                            window.localStorage.setItem("mb_userid", data.data.id);
+                            window.localStorage.setItem("mb_token", data.data.token);
+                            window.localStorage.setItem("mb_nickname", data.data.nickname);
+                        }
+                    },
+                    error:function (data) {
+                        toastr.error(data.msg)
+                    }
+                })
+            }
+
+            function search_login() {
+                var username = $('#login-name').val();
+                var password = $('#login-name').val();
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:9000/user/login',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({username:username,password:password}),
+                    dataType:'json',
+                    success:function (data) {
+                        if (data.code!=0){
+                            toastr.error(data.msg);
+                        }else {
+                            toastr.success("login success!");
+                            window.localStorage.setItem("mb_userid", data.data.id);
+                            window.localStorage.setItem("mb_token", data.data.token);
+                            window.localStorage.setItem("mb_nickname", data.data.nickname);
+                            window.location.href = "search.html";
+                        }
+                    },
+                    error:function (data) {
+
+                    }
+                })
+            }
+
+            function write_login() {
+                var username = $('#login-name').val();
+                var password = $('#login-name').val();
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:9000/user/login',
+                    contentType:'application/json;charset=UTF-8',
+                    data:JSON.stringify({username:username,password:password}),
+                    dataType:'json',
+                    success:function (data) {
+                        if (data.code!=0){
+                            toastr.error(data.msg);
+						}else {
+                            toastr.success("login success!");
+                            localStorage.setItem("mb_userid", data.data.id);
+                            localStorage.setItem("mb_token", data.data.token);
+                            localStorage.setItem("mb_nickname", data.data.nickname);
+                            window.location.href = "write.html";
+                        }
+					},
+                    error:function (data) {
+
+                    }
+                })
+            }
+
+            function logout() {
+                localStorage.setItem("mb_userid","");
+                localStorage.setItem("mb_token","");
+                localStorage.setItem("mb_nickname","");
+            }
+		</script>
+	</body>
+</html>
